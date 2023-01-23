@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        run: cd src/app/
       - name: Setup .NET Core SDK 6.0
         uses: actions/setup-dotnet@v3
         with:
@@ -17,9 +16,9 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet build --no-restore
+        run: dotnet build src/build/ --no-restore
       - name: Run app
-        run: dotnet run --no-restore
+        run: dotnet run src/build/ --no-restore
       - name: Test GET-request
         run: |
           ANSW=$(curl http://127.0.0.1:5000/)
