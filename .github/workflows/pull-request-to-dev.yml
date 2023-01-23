@@ -1,0 +1,25 @@
+name: Pull Request To Dev
+run-name: Run Integration Tests
+on:
+  pull_request:
+    branches:
+      - 'dev'
+jobs:
+  integration_testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install requirements
+        run: dotnet restore
+        run: dotnet build
+      - name: Run app
+        run: dotnet run ./src/app/app.csroject &
+      - name: Test GET-request
+        run: |
+          ANSW=$(curl http://127.0.0.1:5000/)
+          if [ "$ANSW" != "Hello, World!" ]; then
+          exit 1
+          else
+          echo "Integration Test PASS"
+          fi
