@@ -18,7 +18,7 @@ jobs:
       - name: Build
         run: dotnet build src/app/app.csproj --no-restore
       - name: Run app
-        run: dotnet run src/app/app.csproj --no-restore
+        run: dotnet run --no-restore
       - name: Test GET-request
         run: |
           ANSW=$(curl http://127.0.0.1:5000/)
