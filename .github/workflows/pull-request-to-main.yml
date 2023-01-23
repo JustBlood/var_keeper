@@ -21,10 +21,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Setup .NET Core SDK 6.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
       - name: Install requirements
-        run: pip install -r requirements.txt
+        run: dotnet restore src/app/app.csproj
+      - name: Build app
+        run: dotnet build src/app/app.csproj --no-restore
       - name: Run app
-        run: python3 ./src/app/app.py &
+        run: dotnet run --project src/app/app.csproj --no-restore &
       - name: Test GET-request
         run: |
           ANSW=$(curl http://127.0.0.1:5000/)
