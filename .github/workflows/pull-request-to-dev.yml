@@ -21,7 +21,8 @@ jobs:
         run: dotnet run --project src/app/app.csproj --no-restore &
       - name: Test GET-request
         run: |
-          ANSW=$(curl http://127.0.0.1:5000/)
+          ANSW=$(curl http://localhost:5000/)
+          ANSW=$(curl http://localhost:5000/)
           if [ "$ANSW" != "Hello World!" ]; then
           exit 1
           else
