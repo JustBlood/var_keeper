@@ -14,11 +14,11 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Install dependencies
-        run: dotnet restore src/build/app.csproj
+        run: dotnet restore src/app/app.csproj
       - name: Build
-        run: dotnet build src/build/app.csproj --no-restore
+        run: dotnet build src/app/app.csproj --no-restore
       - name: Run app
-        run: dotnet run src/build/app.csproj --no-restore
+        run: dotnet run src/app/app.csproj --no-restore
       - name: Test GET-request
         run: |
           ANSW=$(curl http://127.0.0.1:5000/)
