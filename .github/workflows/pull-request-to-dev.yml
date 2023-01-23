@@ -7,14 +7,19 @@ on:
 jobs:
   integration_testing:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['5.0.x', '6.0.x']
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install requirements
-        run: dotnet restore
-        run: dotnet build
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-verison }}
+        uses: actions/setup-dotnet@v3
+      - name: Install dependencies
+        run: dotnet restore /src/app/app.csproj
+      - name: Build
+        run: dotnet build /src/app/app.csproj  --no-restore
       - name: Run app
-        run: dotnet run ./src/app/app.csroject &
+        run: dotnet run ./src/app/app.csproj --no-restore
       - name: Test GET-request
         run: |
           ANSW=$(curl http://127.0.0.1:5000/)
