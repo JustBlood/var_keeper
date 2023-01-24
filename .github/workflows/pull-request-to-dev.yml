@@ -21,10 +21,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup .NET Core SDK 6.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
       - name: Install dependencies
         run: dotnet restore src/app/app.csproj
       - name: Build
