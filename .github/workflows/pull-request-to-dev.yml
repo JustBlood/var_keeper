@@ -28,7 +28,7 @@ jobs:
       - name: Run app
         run: dotnet run --project src/app/app.csproj --no-restore &
       - name: Install curl
-        run: apt-get -y update; apt-get -y install curl
+        run: apt -y update; apt -y install curl
       - name: Set variable 1 in 122 val
         run: curl -X POST -d "Name=123&Value=122" http://127.0.0.1:5000/Vars/Create/
       - name: Test getting the value of a variable
