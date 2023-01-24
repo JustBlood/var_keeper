@@ -14,32 +14,42 @@ jobs:
         run: |
           chmod +x ./test/unit-tests.sh
           ./test/unit-tests.sh
-        
   integration_testing:
-    needs: unit_testing
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/sdk:6.0-alpine
+    services:
+      db:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Setup .NET Core SDK 6.0
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 6.0.x
-      - name: Install requirements
+      - name: Install dependencies
         run: dotnet restore src/app/app.csproj
-      - name: Build app
+      - name: Build
         run: dotnet build src/app/app.csproj --no-restore
       - name: Run app
         run: dotnet run --project src/app/app.csproj --no-restore &
-      - name: Test GET-request
+      - name: Sleep
+        run: sleep 15;
+      - name: Trying to connect
+        run: curl "http://127.0.0.1:5000/"
+      - name: Set variable 1 in 122 val
+        run: curl -X POST -d "Name=123&Value=122" "http://localhost:5000/Vars/Create/"
+      - name: Test getting the value of a variable
         run: |
-          ANSW=$(curl http://127.0.0.1:5000/)
-          if [ "$ANSW" != "Hello world!" ]; then
-          exit 1
+          VALUE=$(curl http://127.0.0.1:5000/Vars/Details/1)
+          if [ "$VALUE" != "122" ]; then
+          exit $VALUE
           else
           echo "Integration Test PASS"
-          fi
-          
+          fi 
   mega_hard_testing:
     needs: [unit_testing, integration_testing]
     runs-on: ubuntu-latest
