@@ -28,7 +28,7 @@ jobs:
       - name: Run app
         run: dotnet run --project src/app/app.csproj --no-restore &
       - name: Trying to connect
-        run: for ((i=1;i<=5;i++)); do  curl "http://127.0.0.1:5000/"; sleep 3; done
+        run: for ((i=1;i<=3;i++)); do   curl "http://127.0.0.1:5000/"; sleep 3; done
       - name: Set variable 1 in 122 val
         run: curl -X POST -d "Name=123&Value=122" "http://localhost:5000/Vars/Create/"
       - name: Test getting the value of a variable
