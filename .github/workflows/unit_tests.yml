@@ -16,5 +16,7 @@ jobs:
           chmod +x ./test/unit-tests.sh
           ./test/unit-tests.sh
         shell: bash
-      - name: Get user email
+      - name: Get user data
         run: echo '${{ toJSON(github) }}'
+      - name: Get user Email
+        run: git config --global user.email
