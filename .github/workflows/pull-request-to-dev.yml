@@ -27,6 +27,8 @@ jobs:
         run: dotnet build src/app/app.csproj --no-restore
       - name: Run app
         run: dotnet run --project src/app/app.csproj --no-restore &
+      - name: Trying to connect
+        run: curl http://127.0.0.1:5000/
       - name: Set variable 1 in 122 val
         run: curl -X POST -d "Name=123&Value=122" http://127.0.0.1:5000/Vars/Create/
       - name: Test getting the value of a variable
