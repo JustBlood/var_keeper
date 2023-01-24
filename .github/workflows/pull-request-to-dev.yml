@@ -7,7 +7,19 @@ on:
 jobs:
   integration_testing:
     runs-on: ubuntu-latest
+    container: mcr.microsoft.com/dotnet/aspnet:6.0-alpine
+    services:
+      db:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        options: >-
+          --health-cmd "mysqladmin ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
+      - name: Checkout
       - uses: actions/checkout@v3
       - name: Setup .NET Core SDK 6.0
         uses: actions/setup-dotnet@v3
@@ -19,10 +31,14 @@ jobs:
         run: dotnet build src/app/app.csproj --no-restore
       - name: Run app
         run: dotnet run --project src/app/app.csproj --no-restore &
-      - name: Test GET-request
+      - name: Install curl
+        run: apt-get -y update; apt-get -y install curl
+      - name: Set variable 1 in 122 val
+        run: curl -X POST -d "Name=123&Value=122" http://127.0.0.1:5000/Vars/Create/
+      - name: Test getting the value of a variable
         run: |
-          ANSW=$(curl http://127.0.0.1:5000/)
-          if [ "$ANSW" != "Hello world!" ]; then
+          VALUE=$(curl http://127.0.0.1:5000/Vars/Details/1)
+          if [ "$VALUE" != "122" ]; then
           exit 1
           else
           echo "Integration Test PASS"

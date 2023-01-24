@@ -27,7 +27,6 @@ public class VarsController : Controller
             {
                 return NotFound();
             }
-
             return View(var1);
         }
 
