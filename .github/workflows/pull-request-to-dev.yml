@@ -37,7 +37,7 @@ jobs:
         run: |
           VALUE=$(curl http://127.0.0.1:5000/Vars/Details/1)
           if [ "$VALUE" != "122" ]; then
-          exit 1
+          exit $VALUE
           else
           echo "Integration Test PASS"
           fi
